@@ -23,13 +23,8 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
       Resource: 'arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/Hub*'
-    - Effect: Allow
-      Action:
-        - lambda:GetLayerVersion
-      Resource: '*'
 
 plugins:
-  - serverless-dotenv-plugin
   - serverless-webpack
   - serverless-offline
 
@@ -38,26 +33,14 @@ custom:
     port: 4000
   webpack:
     webpackConfig: 'webpack.config.js'
-    includeModules: false
+    includeModules: true
     packager: 'yarn'
 
 functions:
-  graphql:
+  gateway:
     handler: src/handler.handler
-    layers:
-      - { Ref: DependenciesLayerLambdaLayer }
     events:
       - http:
           path: api
           method: post
           cors: true
-
-layers:
-  dependenciesLayer:
-    path: src/layer
-    package:
-      include:
-        - node_modules
-        - node_modules/**/
-    compatibleRuntimes:
-      - nodejs10.x

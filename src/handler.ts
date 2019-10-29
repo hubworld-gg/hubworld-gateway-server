@@ -1,7 +1,6 @@
 import { APIGatewayProxyEvent, Context, Callback } from 'aws-lambda';
-import { ApolloServer, makeExecutableSchema } from 'apollo-server-lambda';
-
-import { resolvers, typeDefs } from './graphql';
+import { ApolloServer } from 'apollo-server-lambda';
+import { ApolloGateway } from '@apollo/gateway';
 import DynamoClient from './lib/dynamo';
 import HttpClient from './lib/http';
 
@@ -20,10 +19,10 @@ export interface AppGraphQLContext {
 }
 
 const server = new ApolloServer({
-  schema: makeExecutableSchema({
-    typeDefs,
-    resolvers
+  gateway: new ApolloGateway({
+    serviceList: [{ name: 'accounts', url: 'http://localhost:4001/api' }]
   }),
+  subscriptions: false,
   debug: process.env.APP_ENV === 'prod' ? false : true,
   context: ({
     event,
@@ -34,7 +33,10 @@ const server = new ApolloServer({
   }): AppGraphQLContext => {
     return {
       dynamoClient: new DynamoClient(),
-      user: event.user
+      user: {
+        username: 'liam',
+        email: 'email.com'
+      }
     };
   }
 });
@@ -44,14 +46,6 @@ export const handler = (
   context: Context,
   callback: Callback
 ) => {
-  if (
-    event.headers &&
-    event.headers['Content-Type'] &&
-    event.headers['Content-Type'] === 'application/graphql'
-  ) {
-    event.body = JSON.stringify({ query: event.body });
-  }
-
   server.createHandler({
     cors: {
       origin: process.env.CORS_ORIGIN,
