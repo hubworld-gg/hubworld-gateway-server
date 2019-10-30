@@ -3,10 +3,7 @@
   "version": "0.1.0",
   "scripts": {
     "start": "serverless offline",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "bash deploy.sh",
-    "deploy-prod": "serverless --stage=production deploy",
-    "generate": "graphql-codegen --config codegen.yml"
+    "deploy-prod": "serverless --stage=production deploy"
   },
   "repository": {
     "type": "git",
@@ -15,26 +12,11 @@
   "dependencies": {
     "@apollo/federation": "^0.10.2",
     "@apollo/gateway": "^0.10.8",
-    "apollo-server": "^2.9.7",
     "apollo-server-lambda": "^2.9.7",
-    "apollo-tracing": "^0.8.5",
     "aws-lambda": "^0.1.2",
-    "babel-polyfill": "^6.26.0",
-    "babel-runtime": "^6.26.0",
-    "graphql": "^14.5.8",
-    "graphql-import": "^0.7.1",
-    "graphql-playground-middleware-lambda": "^1.7.13",
-    "graphql-tag": "^2.10.1",
-    "graphql-tools": "^4.0.6"
+    "graphql": "^14.5.8"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "^1.8.2",
-    "@graphql-codegen/typescript": "1.8.2",
-    "@graphql-codegen/typescript-resolvers": "1.8.2",
-    "@types/aws-lambda": "^8.10.33",
-    "@types/graphql": "^14.5.0",
-    "@types/node": "^12.11.7",
-    "aws-sdk": "^2.556.0",
     "serverless": "^1.55.1",
     "serverless-offline": "^5.12.0",
     "serverless-webpack": "^5.3.1",

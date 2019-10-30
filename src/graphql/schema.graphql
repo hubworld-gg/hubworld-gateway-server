@@ -45,26 +45,6 @@ type Game {
   covers: GameImage
 }
 
-enum LinkType {
-  TWITCH
-  MIXER
-  DISCORD
-  YOUTUBE
-  FACEBOOK
-  STEAM
-  ORIGIN
-  UPLAY
-  BATTLENET
-  RIOT
-  PLAIN
-}
-
-type SocialLink {
-  type: LinkType
-  url: String
-  name: String
-}
-
 type GameImage {
   cover: String
   logo: String
@@ -74,13 +54,6 @@ type GameImage {
   screenshotHuge: String
   res720: String
   res1080: String
-}
-
-type Me {
-  about: About
-  posts: [Post]
-  following: [User]
-  followers: [User]
 }
 
 type Query {
