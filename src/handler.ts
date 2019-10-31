@@ -9,7 +9,7 @@ export interface AppUserContext {
 }
 
 export interface AppGraphQLContext {
-  userId: String;
+  userID: String;
 }
 
 class AuthenticatedDataSource extends RemoteGraphQLDataSource {
@@ -17,17 +17,17 @@ class AuthenticatedDataSource extends RemoteGraphQLDataSource {
     const { request, context } = params;
     // pass the user's id from the context to underlying services
     // as a header called `user-id`
-    request.http.headers.set('user-id', context.userId);
+    request.http.headers.set('user-id', context.userID);
   }
 }
 
-// const getUserId = (token: string): string => token;
+const getUserId = (token: string): string => token;
 
 const server = new ApolloServer({
   gateway: new ApolloGateway({
     serviceList: [
-      { name: 'accounts', url: 'http://localhost:4001/api' }
-      // { name: 'posts', url: 'http://localhost:4002/api' }
+      { name: 'accounts', url: 'http://localhost:4001/api' },
+      { name: 'posts', url: 'http://localhost:4002/api' }
     ],
     buildService({ url }) {
       return new AuthenticatedDataSource({ url });
@@ -35,15 +35,18 @@ const server = new ApolloServer({
   }),
   subscriptions: false,
   debug: process.env.APP_ENV === 'prod' ? false : true,
-  context: ({ req }): AppGraphQLContext => {
+  context: ({ event }): AppGraphQLContext => {
     // // get the user token from the headers
-    // const token = req.headers.authorization || '';
+    let token = undefined;
+    if (event && event.headers && event.headers.authorization) {
+      token = event.headers.authorization || '';
+    }
 
-    // // try to retrieve a user with the token
-    // const userId = getUserId(token);
+    // try to retrieve a user with the token
+    const userID = getUserId(token);
 
     // add the user to the context
-    return { userId: 'my-user' };
+    return { userID };
   }
 });
 
