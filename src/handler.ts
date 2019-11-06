@@ -3,12 +3,7 @@ import { ApolloServer } from 'apollo-server-lambda';
 import { ApolloGateway, RemoteGraphQLDataSource } from '@apollo/gateway';
 import HttpClient from './lib/http';
 
-export interface AppUserContext {
-  username: string;
-  email: string;
-}
-
-export interface AppGraphQLContext {
+interface AppGraphQLContext {
   userID: String;
 }
 
@@ -27,7 +22,8 @@ const server = new ApolloServer({
   gateway: new ApolloGateway({
     serviceList: [
       { name: 'accounts', url: process.env.ACCOUNTS_FEDERATION_URL },
-      { name: 'posts', url: process.env.POSTS_FEDERATION_URL }
+      { name: 'posts', url: process.env.POSTS_FEDERATION_URL },
+      { name: 'games', url: process.env.GAMES_FEDERATION_URL }
     ],
     buildService({ url }) {
       return new AuthenticatedDataSource({ url });
