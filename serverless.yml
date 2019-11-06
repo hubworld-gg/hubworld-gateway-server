@@ -30,6 +30,7 @@ functions:
     environment:
       ACCOUNTS_FEDERATION_URL: ${file(./serverless.env.yml):${self:provider.stage}.ACCOUNTS_FEDERATION_URL}
       POSTS_FEDERATION_URL: ${file(./serverless.env.yml):${self:provider.stage}.POSTS_FEDERATION_URL}
+      GAMES_FEDERATION_URL: ${file(./serverless.env.yml):${self:provider.stage}.GAMES_FEDERATION_URL}
     events:
       - http:
           path: api
