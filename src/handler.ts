@@ -26,8 +26,8 @@ const getUserId = (token: string): string => token;
 const server = new ApolloServer({
   gateway: new ApolloGateway({
     serviceList: [
-      { name: 'accounts', url: 'http://localhost:4001/api' },
-      { name: 'posts', url: 'http://localhost:4002/api' }
+      { name: 'accounts', url: process.env.ACCOUNTS_FEDERATION_URL },
+      { name: 'posts', url: process.env.POSTS_FEDERATION_URL }
     ],
     buildService({ url }) {
       return new AuthenticatedDataSource({ url });

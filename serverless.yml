@@ -1,4 +1,4 @@
-service: hubworld
+service: hubworld-gateway
 app: hubworld
 org: lmuller18
 
@@ -11,18 +11,6 @@ provider:
     individually: true
     exclude:
       - node_modules
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:BatchGetItem
-        - dynamodb:BatchWriteItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-      Resource: 'arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/Hub*'
 
 plugins:
   - serverless-webpack
@@ -39,6 +27,9 @@ custom:
 functions:
   gateway:
     handler: src/handler.handler
+    environment:
+      ACCOUNTS_FEDERATION_URL: ${file(./serverless.env.yml):${self:provider.stage}.ACCOUNTS_FEDERATION_URL}
+      POSTS_FEDERATION_URL: ${file(./serverless.env.yml):${self:provider.stage}.POSTS_FEDERATION_URL}
     events:
       - http:
           path: api
