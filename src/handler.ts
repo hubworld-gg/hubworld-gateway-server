@@ -34,8 +34,8 @@ const server = new ApolloServer({
   context: ({ event }): AppGraphQLContext => {
     // get the user token from the headers
     let token = undefined;
-    if (event && event.headers && event.headers.authorization) {
-      token = event.headers.authorization || '';
+    if (event && event.headers) {
+      token = event.headers['authorization'] || event.headers['Authorization'];
     }
 
     // try to retrieve a user with the token
