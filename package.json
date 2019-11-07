@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "scripts": {
     "start": "serverless offline",
+    "start:local": "yarn start --stage local",
+    "deploy": "serverless deploy",
     "deploy-prod": "serverless --stage=production deploy"
   },
   "repository": {

@@ -32,7 +32,7 @@ const server = new ApolloServer({
   subscriptions: false,
   debug: process.env.APP_ENV === 'prod' ? false : true,
   context: ({ event }): AppGraphQLContext => {
-    // // get the user token from the headers
+    // get the user token from the headers
     let token = undefined;
     if (event && event.headers && event.headers.authorization) {
       token = event.headers.authorization || '';
@@ -53,7 +53,7 @@ export const handler = (
 ) => {
   server.createHandler({
     cors: {
-      origin: process.env.CORS_ORIGIN,
+      origin: '*',
       credentials: true
     }
   })(event, context, (err: any, data: any) => {
