@@ -1,7 +1,6 @@
 import { APIGatewayProxyEvent, Context, Callback } from 'aws-lambda';
 import { ApolloServer } from 'apollo-server-lambda';
 import { ApolloGateway, RemoteGraphQLDataSource } from '@apollo/gateway';
-import HttpClient from './lib/http';
 
 interface AppGraphQLContext {
   userID: String;
@@ -33,10 +32,8 @@ const server = new ApolloServer({
   debug: process.env.APP_ENV === 'prod' ? false : true,
   context: ({ event }): AppGraphQLContext => {
     // get the user token from the headers
-    let token = undefined;
-    if (event && event.headers) {
-      token = event.headers['authorization'] || event.headers['Authorization'];
-    }
+    const { headers } = event;
+    const token = headers?.['authorization'] || headers['Authorization'];
 
     // try to retrieve a user with the token
     const userID = getUserId(token);
@@ -57,10 +54,6 @@ export const handler = (
       credentials: true
     }
   })(event, context, (err: any, data: any) => {
-    if (err) {
-      HttpClient.sendErrorResponse(err, callback);
-    } else {
-      callback(null, data);
-    }
+    callback(null, data);
   });
 };
